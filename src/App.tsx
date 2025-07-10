@@ -1,7 +1,12 @@
 import "./App.css";
+import TaskManagement from "./TaskManagement";
 
 function App() {
-  return <></>;
+  return (
+    <>
+      <TaskManagement />
+    </>
+  );
 }
 
 export default App;
