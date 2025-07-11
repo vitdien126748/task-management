@@ -1,9 +1,14 @@
 import React from "react";
-import { getTasks } from "../services";
+import { deleteTask, getTasks } from "../services";
 import type { Task } from "../type";
 import { useNavigate } from "react-router";
 import SearchTasks from "../components/SearchTasks";
 import { FilterContext } from "../context";
+import {
+  EyeIcon,
+  PencilSquareIcon,
+  TrashIcon,
+} from "@heroicons/react/24/outline";
 
 const OurTasksPage = () => {
   const [tasks, setTasks] = React.useState<Task[]>([]);
@@ -30,6 +35,22 @@ const OurTasksPage = () => {
     console.log("Search filters:", filters);
   };
 
+  const handleDeleteTask = async (id: number) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this task? This action cannot be undone."
+    );
+    if (confirmDelete) {
+      try {
+        await deleteTask(id);
+        setTasks(tasks.filter((task) => task.id !== id));
+        alert("Task deleted successfully.");
+      } catch (error) {
+        console.error("Failed to delete task:", error);
+        alert("Failed to delete task. Please try again.");
+      }
+    }
+  };
+
   const filteredTasks = tasks.filter((task) => {
     const matchesStatus = filters.status
       ? task.status.toLocaleLowerCase() === filters.status.toLocaleLowerCase()
@@ -42,61 +63,161 @@ const OurTasksPage = () => {
   });
 
   return (
-    <div className="overflow-x-auto">
-      <SearchTasks onSearch={handleOnSearch} />
-      <table className="min-w-full bg-white rounded-lg shadow divide-y divide-gray-200">
-        <thead>
-          <tr className="bg-blue-100 text-blue-900">
-            <th className="px-3 py-2 text-left">ID</th>
-            <th className="px-3 py-2 text-left">Title</th>
-            <th className="px-3 py-2 text-left">Description</th>
-            <th className="px-3 py-2 text-left">Status</th>
-            <th className="px-3 py-2 text-left">Priority</th>
-            <th className="px-3 py-2 text-left">Start Date</th>
-            <th className="px-3 py-2 text-left">Due Date</th>
-            <th className="px-3 py-2 text-left">Assignee</th>
-            <th className="px-3 py-2 text-left">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredTasks?.map((task) => (
-            <tr key={task.id} className="hover:bg-blue-50 transition">
-              <td className="px-3 py-2">{task.id}</td>
-              <td className="px-3 py-2">{task.title}</td>
-              <td className="px-3 py-2">{task.description}</td>
-              <td className="px-3 py-2 capitalize">
-                {task.status.replace("_", " ")}
-              </td>
-              <td className="px-3 py-2 capitalize">{task.priority}</td>
-              <td className="px-3 py-2">
-                {task.start_date
-                  ? new Date(task.start_date).toLocaleDateString()
-                  : ""}
-              </td>
-              <td className="px-3 py-2">
-                {task.due_date
-                  ? new Date(task.due_date).toLocaleDateString()
-                  : ""}
-              </td>
-              <td className="px-3 py-2">{task.assignee_id}</td>
-              <td className="px-3 py-2 flex gap-2">
-                <button
-                  onClick={() => navigate(`/view-task/${task.id}`)}
-                  className="px-2 py-1 rounded bg-gray-100 text-blue-600 hover:bg-blue-200"
+    <div className="w-full px-2 md:px-0 animate-fade-in">
+      <div className="mb-6 animate-slide-in-from-top">
+        <SearchTasks onSearch={handleOnSearch} />
+      </div>
+
+      <div className="bg-white rounded-2xl shadow-2xl overflow-hidden transform transition-all duration-500 hover:shadow-3xl">
+        <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4">
+          <h2 className="text-2xl font-bold text-white drop-shadow-lg">
+            All Tasks ({filteredTasks?.length || 0})
+          </h2>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead>
+              <tr className="bg-gradient-to-r from-blue-50 to-indigo-50 text-gray-700">
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">
+                  ID
+                </th>
+                <th className="px-10 py-3 text-left text-xs font-semibold uppercase tracking-wider">
+                  Title
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider hidden md:table-cell">
+                  Description
+                </th>
+                <th className="px-10 py-3 text-left text-xs font-semibold uppercase tracking-wider">
+                  Status
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">
+                  Priority
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider hidden sm:table-cell">
+                  Start Date
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider hidden sm:table-cell">
+                  Due Date
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider hidden lg:table-cell">
+                  Assignee
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {filteredTasks?.length === 0 && (
+                <tr>
+                  <td
+                    colSpan={9}
+                    className="text-center py-12 text-gray-400 animate-pulse"
+                  >
+                    <div className="flex flex-col items-center">
+                      <div className="text-4xl mb-2">📋</div>
+                      <div className="text-lg font-medium">No tasks found</div>
+                      <div className="text-sm">
+                        Try adjusting your search filters
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              )}
+              {filteredTasks?.map((task, index) => (
+                <tr
+                  key={task.id}
+                  className={`hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-300 group animate-fade-in ${
+                    index % 2 === 0 ? "bg-gray-50" : "bg-white"
+                  }`}
+                  style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  View
-                </button>
-                <button
-                  onClick={() => navigate(`/update-task/${task.id}`)}
-                  className="px-2 py-1 rounded bg-gray-100 text-blue-600 hover:bg-blue-200"
-                >
-                  Edit
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                  <td className="px-4 py-4 font-bold text-blue-600">
+                    {task.id}
+                  </td>
+                  <td className="px-4 py-4 font-medium text-gray-900 group-hover:text-blue-600 transition-colors">
+                    {task.title}
+                  </td>
+                  <td className="px-4 py-4 hidden md:table-cell text-gray-600 max-w-xs truncate">
+                    {task.description}
+                  </td>
+                  <td className="px-4 py-4 capitalize">
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-bold shadow-sm ${
+                        task.status === "done"
+                          ? "bg-green-100 text-green-800 border border-green-200"
+                          : task.status === "in_progress"
+                          ? "bg-yellow-100 text-yellow-800 border border-yellow-200"
+                          : "bg-gray-100 text-gray-800 border border-gray-200"
+                      }`}
+                    >
+                      {task.status.replace("_", " ")}
+                    </span>
+                  </td>
+                  <td className="px-4 py-4 capitalize">
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-bold shadow-sm ${
+                        task.priority === "high"
+                          ? "bg-red-100 text-red-800 border border-red-200 animate-pulse"
+                          : task.priority === "medium"
+                          ? "bg-yellow-100 text-yellow-800 border border-yellow-200"
+                          : "bg-blue-100 text-blue-800 border border-blue-200"
+                      }`}
+                    >
+                      {task.priority}
+                    </span>
+                  </td>
+                  <td className="px-4 py-4 hidden sm:table-cell text-gray-600 text-sm">
+                    {task.start_date
+                      ? new Date(task.start_date).toLocaleDateString()
+                      : "Not set"}
+                  </td>
+                  <td className="px-4 py-4 hidden sm:table-cell text-gray-600 text-sm">
+                    {task.due_date
+                      ? new Date(task.due_date).toLocaleDateString()
+                      : "Not set"}
+                  </td>
+                  <td className="px-4 py-4 hidden lg:table-cell text-gray-600 text-sm">
+                    {task.assignee_id}
+                  </td>
+                  <td className="px-4 py-4">
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => navigate(`/view-task/${task.id}`)}
+                        className="p-2 rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200 hover:scale-110 transition-all duration-200 shadow-sm"
+                        title="View Task"
+                      >
+                        <EyeIcon className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => navigate(`/update-task/${task.id}`)}
+                        className="p-2 rounded-full bg-yellow-100 text-yellow-700 hover:bg-yellow-200 hover:scale-110 transition-all duration-200 shadow-sm"
+                        title="Edit Task"
+                      >
+                        <PencilSquareIcon className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => {
+                          if (typeof task.id === "number") {
+                            handleDeleteTask(task.id);
+                          } else {
+                            alert("Task ID is missing.");
+                          }
+                        }}
+                        className="p-2 rounded-full bg-red-100 text-red-600 hover:bg-red-200 hover:scale-110 transition-all duration-200 shadow-sm"
+                        title="Delete Task"
+                      >
+                        <TrashIcon className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 };

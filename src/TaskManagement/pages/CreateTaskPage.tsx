@@ -3,7 +3,7 @@ import * as yup from "yup";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { createTask } from "../services";
 import { useNavigate } from "react-router";
-import { ArrowLeftIcon } from "@heroicons/react/16/solid";
+import { ArrowLeftIcon, PlusIcon } from "@heroicons/react/24/outline";
 
 interface ICreateTaskFormInput {
   title: string;
@@ -83,180 +83,272 @@ const CreateTaskPage = () => {
       alert("Failed to create task. Please try again.");
     }
   };
+
   return (
-    <div className="max-w-md mx-auto bg-white rounded-lg shadow p-6 mt-8">
-      <button
-        onClick={() => navigate("/tasks")}
-        className="flex items-center text-blue-600 hover:underline mb-4"
-      >
-        <ArrowLeftIcon className="w-5 h-5 mr-1" />
-        Back to Tasks
-      </button>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <div>
-          <label
-            htmlFor="title"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Title:
-          </label>
-          <input
-            {...register("title")}
-            type="text"
-            id="title"
-            name="title"
-            placeholder="Enter task title"
-            className="w-full rounded border-gray-300 focus:ring-blue-400 focus:border-blue-400"
-          />
-          {errors.title && (
-            <span className="text-red-500 text-xs">{errors.title.message}</span>
-          )}
-        </div>
-        {/* ...tương tự cho các trường khác... */}
-        <div>
-          <label
-            htmlFor="description"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Description:
-          </label>
-          <input
-            {...register("description")}
-            type="text"
-            id="description"
-            name="description"
-            placeholder="Enter task description"
-            className="w-full rounded border-gray-300 focus:ring-blue-400 focus:border-blue-400"
-          />
-          {errors.description && (
-            <span className="text-red-500 text-xs">
-              {errors.description.message}
-            </span>
-          )}
+    <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in">
+      <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100">
+        <div className="bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
+                <PlusIcon className="w-6 h-6 text-white" />
+              </div>
+              <h2 className="text-2xl font-bold text-white drop-shadow-lg">
+                Create New Task
+              </h2>
+            </div>
+            <button
+              type="button"
+              onClick={() => navigate("/tasks")}
+              className="flex items-center gap-2 px-3 py-2 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all duration-200 backdrop-blur-sm"
+            >
+              <ArrowLeftIcon className="w-4 h-4" />
+              <span className="hidden sm:inline">Back to Tasks</span>
+            </button>
+          </div>
         </div>
 
-        {/* start_date */}
-        <div>
-          <label
-            htmlFor="start_date"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Start Date:
-          </label>
-          <input
-            {...register("start_date")}
-            type="date"
-            id="start_date"
-            name="start_date"
-            placeholder="YYYY-MM-DD"
-            className="w-full rounded border-gray-300 focus:ring-blue-400 focus:border-blue-400"
-          />
-          {errors.start_date && (
-            <span className="text-red-500 text-xs">
-              {errors.start_date.message}
-            </span>
-          )}
-        </div>
+        <div className="p-6 sm:p-8">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="md:col-span-2 group">
+                <label
+                  htmlFor="title"
+                  className="block text-sm font-medium text-gray-700 mb-2 transition-colors duration-200 group-focus-within:text-purple-600"
+                >
+                  📝 Task Title *
+                </label>
+                <input
+                  {...register("title")}
+                  type="text"
+                  id="title"
+                  name="title"
+                  placeholder="Enter a descriptive task title"
+                  className={`w-full px-4 py-3 rounded-xl border focus:outline-none transition-all duration-200 ${
+                    errors.title
+                      ? "border-red-400 focus:ring-2 focus:ring-red-400 animate-pulse"
+                      : "border-gray-300 focus:ring-2 focus:ring-purple-400 focus:border-purple-400 hover:border-gray-400"
+                  } bg-gray-50 hover:bg-white focus:bg-white transform focus:scale-[1.02]`}
+                />
+                {errors.title && (
+                  <span className="text-red-500 text-sm mt-1 block animate-bounce">
+                    ⚠️ {errors.title.message}
+                  </span>
+                )}
+              </div>
 
-        {/* due_date */}
-        <div>
-          <label
-            htmlFor="due_date"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Due Date:
-          </label>
-          <input
-            {...register("due_date")}
-            type="date"
-            id="due_date"
-            name="due_date"
-            placeholder="YYYY-MM-DD"
-            className="w-full rounded border-gray-300 focus:ring-blue-400 focus:border-blue-400"
-          />
-          {errors.due_date && (
-            <span className="text-red-500 text-xs">
-              {errors.due_date.message}
-            </span>
-          )}
-        </div>
+              <div className="md:col-span-2 group">
+                <label
+                  htmlFor="description"
+                  className="block text-sm font-medium text-gray-700 mb-2 transition-colors duration-200 group-focus-within:text-purple-600"
+                >
+                  📄 Description
+                </label>
+                <textarea
+                  {...register("description")}
+                  id="description"
+                  name="description"
+                  rows={4}
+                  placeholder="Describe the task in detail..."
+                  className={`w-full px-4 py-3 rounded-xl border focus:outline-none transition-all duration-200 resize-none ${
+                    errors.description
+                      ? "border-red-400 focus:ring-2 focus:ring-red-400 animate-pulse"
+                      : "border-gray-300 focus:ring-2 focus:ring-purple-400 focus:border-purple-400 hover:border-gray-400"
+                  } bg-gray-50 hover:bg-white focus:bg-white transform focus:scale-[1.02]`}
+                />
+                {errors.description && (
+                  <span className="text-red-500 text-sm mt-1 block animate-bounce">
+                    ⚠️ {errors.description.message}
+                  </span>
+                )}
+              </div>
 
-        <div>
-          <label
-            htmlFor="status"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Status:
-          </label>
-          <select
-            {...register("status")}
-            id="status"
-            name="status"
-            className="w-full rounded border-gray-300 focus:ring-blue-400 focus:border-blue-400"
-          >
-            <option value="to_do">To Do</option>
-            <option value="in_progress">In Progress</option>
-            <option value="done">Done</option>
-          </select>
-          {errors.status && (
-            <span className="text-red-500 text-xs">
-              {errors.status.message}
-            </span>
-          )}
-        </div>
+              <div className="group">
+                <label
+                  htmlFor="start_date"
+                  className="block text-sm font-medium text-gray-700 mb-2 transition-colors duration-200 group-focus-within:text-purple-600"
+                >
+                  🗓️ Start Date *
+                </label>
+                <input
+                  {...register("start_date")}
+                  type="date"
+                  id="start_date"
+                  name="start_date"
+                  className={`w-full px-4 py-3 rounded-xl border focus:outline-none transition-all duration-200 ${
+                    errors.start_date
+                      ? "border-red-400 focus:ring-2 focus:ring-red-400 animate-pulse"
+                      : "border-gray-300 focus:ring-2 focus:ring-purple-400 focus:border-purple-400 hover:border-gray-400"
+                  } bg-gray-50 hover:bg-white focus:bg-white transform focus:scale-[1.02]`}
+                />
+                {errors.start_date && (
+                  <span className="text-red-500 text-sm mt-1 block animate-bounce">
+                    ⚠️ {errors.start_date.message}
+                  </span>
+                )}
+              </div>
 
-        <div>
-          <label
-            htmlFor="priority"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Priority:
-          </label>
-          <select
-            {...register("priority")}
-            id="priority"
-            name="priority"
-            className="w-full rounded border-gray-300 focus:ring-blue-400 focus:border-blue-400"
-          >
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
-          </select>
-          {errors.priority && (
-            <span className="text-red-500 text-xs">
-              {errors.priority.message}
-            </span>
-          )}
-        </div>
+              <div className="group">
+                <label
+                  htmlFor="due_date"
+                  className="block text-sm font-medium text-gray-700 mb-2 transition-colors duration-200 group-focus-within:text-purple-600"
+                >
+                  📅 Due Date
+                </label>
+                <input
+                  {...register("due_date")}
+                  type="date"
+                  id="due_date"
+                  name="due_date"
+                  className={`w-full px-4 py-3 rounded-xl border focus:outline-none transition-all duration-200 ${
+                    errors.due_date
+                      ? "border-red-400 focus:ring-2 focus:ring-red-400 animate-pulse"
+                      : "border-gray-300 focus:ring-2 focus:ring-purple-400 focus:border-purple-400 hover:border-gray-400"
+                  } bg-gray-50 hover:bg-white focus:bg-white transform focus:scale-[1.02]`}
+                />
+                {errors.due_date && (
+                  <span className="text-red-500 text-sm mt-1 block animate-bounce">
+                    ⚠️ {errors.due_date.message}
+                  </span>
+                )}
+              </div>
 
-        <div>
-          <label
-            htmlFor="assignee_id"
-            className="block text-sm font-medium text-gray-700 mb-1"
-          >
-            Assignee ID:
-          </label>
-          <input
-            {...register("assignee_id")}
-            type="text"
-            id="assignee_id"
-            name="assignee_id"
-            placeholder="Enter assignee ID"
-            className="w-full rounded border-gray-300 focus:ring-blue-400 focus:border-blue-400"
-          />
-          {errors.assignee_id && (
-            <span className="text-red-500 text-xs">
-              {errors.assignee_id.message}
-            </span>
-          )}
+              <div className="group">
+                <label
+                  htmlFor="status"
+                  className="block text-sm font-medium text-gray-700 mb-2 transition-colors duration-200 group-focus-within:text-purple-600"
+                >
+                  📊 Status *
+                </label>
+                <div className="relative">
+                  <select
+                    {...register("status")}
+                    id="status"
+                    name="status"
+                    className={`w-full px-4 py-3 rounded-xl border focus:outline-none transition-all duration-200 appearance-none cursor-pointer ${
+                      errors.status
+                        ? "border-red-400 focus:ring-2 focus:ring-red-400 animate-pulse"
+                        : "border-gray-300 focus:ring-2 focus:ring-purple-400 focus:border-purple-400 hover:border-gray-400"
+                    } bg-gray-50 hover:bg-white focus:bg-white transform focus:scale-[1.02]`}
+                  >
+                    <option value="to_do">📋 To Do</option>
+                    <option value="in_progress">⏳ In Progress</option>
+                    <option value="done">✅ Done</option>
+                  </select>
+                  <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                    <svg
+                      className="w-4 h-4 text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                {errors.status && (
+                  <span className="text-red-500 text-sm mt-1 block animate-bounce">
+                    ⚠️ {errors.status.message}
+                  </span>
+                )}
+              </div>
+
+              <div className="group">
+                <label
+                  htmlFor="priority"
+                  className="block text-sm font-medium text-gray-700 mb-2 transition-colors duration-200 group-focus-within:text-purple-600"
+                >
+                  🔥 Priority *
+                </label>
+                <div className="relative">
+                  <select
+                    {...register("priority")}
+                    id="priority"
+                    name="priority"
+                    className={`w-full px-4 py-3 rounded-xl border focus:outline-none transition-all duration-200 appearance-none cursor-pointer ${
+                      errors.priority
+                        ? "border-red-400 focus:ring-2 focus:ring-red-400 animate-pulse"
+                        : "border-gray-300 focus:ring-2 focus:ring-purple-400 focus:border-purple-400 hover:border-gray-400"
+                    } bg-gray-50 hover:bg-white focus:bg-white transform focus:scale-[1.02]`}
+                  >
+                    <option value="low">🟢 Low Priority</option>
+                    <option value="medium">🟡 Medium Priority</option>
+                    <option value="high">🔴 High Priority</option>
+                  </select>
+                  <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                    <svg
+                      className="w-4 h-4 text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                {errors.priority && (
+                  <span className="text-red-500 text-sm mt-1 block animate-bounce">
+                    ⚠️ {errors.priority.message}
+                  </span>
+                )}
+              </div>
+
+              <div className="md:col-span-2 group">
+                <label
+                  htmlFor="assignee_id"
+                  className="block text-sm font-medium text-gray-700 mb-2 transition-colors duration-200 group-focus-within:text-purple-600"
+                >
+                  👤 Assignee ID
+                </label>
+                <input
+                  {...register("assignee_id")}
+                  type="number"
+                  id="assignee_id"
+                  name="assignee_id"
+                  placeholder="Enter assignee ID (optional)"
+                  className={`w-full px-4 py-3 rounded-xl border focus:outline-none transition-all duration-200 ${
+                    errors.assignee_id
+                      ? "border-red-400 focus:ring-2 focus:ring-red-400 animate-pulse"
+                      : "border-gray-300 focus:ring-2 focus:ring-purple-400 focus:border-purple-400 hover:border-gray-400"
+                  } bg-gray-50 hover:bg-white focus:bg-white transform focus:scale-[1.02]`}
+                />
+                {errors.assignee_id && (
+                  <span className="text-red-500 text-sm mt-1 block animate-bounce">
+                    ⚠️ {errors.assignee_id.message}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200">
+              <button
+                type="button"
+                onClick={() => navigate("/tasks")}
+                className="flex-1 py-3 px-6 rounded-xl border border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="flex-1 py-3 px-6 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold hover:from-purple-700 hover:to-pink-700 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
+              >
+                <PlusIcon className="w-5 h-5" />
+                <span>Create Task</span>
+              </button>
+            </div>
+          </form>
         </div>
-        <button
-          type="submit"
-          className="w-full py-2 rounded bg-blue-600 text-white font-semibold hover:bg-blue-700 transition"
-        >
-          Create Task
-        </button>
-      </form>
+      </div>
     </div>
   );
 };
