@@ -85,22 +85,20 @@ const CreateTaskPage = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8 animate-fade-in">
-      <div className="bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100">
-        <div className="bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-4">
+    <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-100">
+        <div className="bg-blue-600 px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
+              <div className="p-2 bg-white/20 rounded-lg">
                 <PlusIcon className="w-6 h-6 text-white" />
               </div>
-              <h2 className="text-2xl font-bold text-white drop-shadow-lg">
-                Create New Task
-              </h2>
+              <h2 className="text-2xl font-bold text-white">Create New Task</h2>
             </div>
             <button
               type="button"
               onClick={() => navigate("/tasks")}
-              className="flex items-center gap-2 px-3 py-2 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-all duration-200 backdrop-blur-sm"
+              className="flex items-center gap-2 px-3 py-2 bg-white/20 text-white rounded-lg hover:bg-white/30"
             >
               <ArrowLeftIcon className="w-4 h-4" />
               <span className="hidden sm:inline">Back to Tasks</span>
@@ -111,10 +109,10 @@ const CreateTaskPage = () => {
         <div className="p-6 sm:p-8">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="md:col-span-2 group">
+              <div className="md:col-span-2">
                 <label
                   htmlFor="title"
-                  className="block text-sm font-medium text-gray-700 mb-2 transition-colors duration-200 group-focus-within:text-purple-600"
+                  className="block text-sm font-medium text-gray-700 mb-2"
                 >
                   📝 Task Title *
                 </label>
@@ -124,23 +122,23 @@ const CreateTaskPage = () => {
                   id="title"
                   name="title"
                   placeholder="Enter a descriptive task title"
-                  className={`w-full px-4 py-3 rounded-xl border focus:outline-none transition-all duration-200 ${
+                  className={`w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
                     errors.title
-                      ? "border-red-400 focus:ring-2 focus:ring-red-400 animate-pulse"
-                      : "border-gray-300 focus:ring-2 focus:ring-purple-400 focus:border-purple-400 hover:border-gray-400"
-                  } bg-gray-50 hover:bg-white focus:bg-white transform focus:scale-[1.02]`}
+                      ? "border-red-400 focus:ring-red-400"
+                      : "border-gray-300 hover:border-gray-400"
+                  } bg-gray-50 hover:bg-white focus:bg-white`}
                 />
                 {errors.title && (
-                  <span className="text-red-500 text-sm mt-1 block animate-bounce">
+                  <span className="text-red-500 text-sm mt-1 block">
                     ⚠️ {errors.title.message}
                   </span>
                 )}
               </div>
 
-              <div className="md:col-span-2 group">
+              <div className="md:col-span-2">
                 <label
                   htmlFor="description"
-                  className="block text-sm font-medium text-gray-700 mb-2 transition-colors duration-200 group-focus-within:text-purple-600"
+                  className="block text-sm font-medium text-gray-700 mb-2"
                 >
                   📄 Description
                 </label>
@@ -150,23 +148,23 @@ const CreateTaskPage = () => {
                   name="description"
                   rows={4}
                   placeholder="Describe the task in detail..."
-                  className={`w-full px-4 py-3 rounded-xl border focus:outline-none transition-all duration-200 resize-none ${
+                  className={`w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none ${
                     errors.description
-                      ? "border-red-400 focus:ring-2 focus:ring-red-400 animate-pulse"
-                      : "border-gray-300 focus:ring-2 focus:ring-purple-400 focus:border-purple-400 hover:border-gray-400"
-                  } bg-gray-50 hover:bg-white focus:bg-white transform focus:scale-[1.02]`}
+                      ? "border-red-400 focus:ring-red-400"
+                      : "border-gray-300 hover:border-gray-400"
+                  } bg-gray-50 hover:bg-white focus:bg-white`}
                 />
                 {errors.description && (
-                  <span className="text-red-500 text-sm mt-1 block animate-bounce">
+                  <span className="text-red-500 text-sm mt-1 block">
                     ⚠️ {errors.description.message}
                   </span>
                 )}
               </div>
 
-              <div className="group">
+              <div>
                 <label
                   htmlFor="start_date"
-                  className="block text-sm font-medium text-gray-700 mb-2 transition-colors duration-200 group-focus-within:text-purple-600"
+                  className="block text-sm font-medium text-gray-700 mb-2"
                 >
                   🗓️ Start Date *
                 </label>
@@ -175,23 +173,23 @@ const CreateTaskPage = () => {
                   type="date"
                   id="start_date"
                   name="start_date"
-                  className={`w-full px-4 py-3 rounded-xl border focus:outline-none transition-all duration-200 ${
+                  className={`w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
                     errors.start_date
-                      ? "border-red-400 focus:ring-2 focus:ring-red-400 animate-pulse"
-                      : "border-gray-300 focus:ring-2 focus:ring-purple-400 focus:border-purple-400 hover:border-gray-400"
-                  } bg-gray-50 hover:bg-white focus:bg-white transform focus:scale-[1.02]`}
+                      ? "border-red-400 focus:ring-red-400"
+                      : "border-gray-300 hover:border-gray-400"
+                  } bg-gray-50 hover:bg-white focus:bg-white`}
                 />
                 {errors.start_date && (
-                  <span className="text-red-500 text-sm mt-1 block animate-bounce">
+                  <span className="text-red-500 text-sm mt-1 block">
                     ⚠️ {errors.start_date.message}
                   </span>
                 )}
               </div>
 
-              <div className="group">
+              <div>
                 <label
                   htmlFor="due_date"
-                  className="block text-sm font-medium text-gray-700 mb-2 transition-colors duration-200 group-focus-within:text-purple-600"
+                  className="block text-sm font-medium text-gray-700 mb-2"
                 >
                   📅 Due Date
                 </label>
@@ -200,23 +198,23 @@ const CreateTaskPage = () => {
                   type="date"
                   id="due_date"
                   name="due_date"
-                  className={`w-full px-4 py-3 rounded-xl border focus:outline-none transition-all duration-200 ${
+                  className={`w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
                     errors.due_date
-                      ? "border-red-400 focus:ring-2 focus:ring-red-400 animate-pulse"
-                      : "border-gray-300 focus:ring-2 focus:ring-purple-400 focus:border-purple-400 hover:border-gray-400"
-                  } bg-gray-50 hover:bg-white focus:bg-white transform focus:scale-[1.02]`}
+                      ? "border-red-400 focus:ring-red-400"
+                      : "border-gray-300 hover:border-gray-400"
+                  } bg-gray-50 hover:bg-white focus:bg-white`}
                 />
                 {errors.due_date && (
-                  <span className="text-red-500 text-sm mt-1 block animate-bounce">
+                  <span className="text-red-500 text-sm mt-1 block">
                     ⚠️ {errors.due_date.message}
                   </span>
                 )}
               </div>
 
-              <div className="group">
+              <div>
                 <label
                   htmlFor="status"
-                  className="block text-sm font-medium text-gray-700 mb-2 transition-colors duration-200 group-focus-within:text-purple-600"
+                  className="block text-sm font-medium text-gray-700 mb-2"
                 >
                   📊 Status *
                 </label>
@@ -225,11 +223,11 @@ const CreateTaskPage = () => {
                     {...register("status")}
                     id="status"
                     name="status"
-                    className={`w-full px-4 py-3 rounded-xl border focus:outline-none transition-all duration-200 appearance-none cursor-pointer ${
+                    className={`w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none cursor-pointer ${
                       errors.status
-                        ? "border-red-400 focus:ring-2 focus:ring-red-400 animate-pulse"
-                        : "border-gray-300 focus:ring-2 focus:ring-purple-400 focus:border-purple-400 hover:border-gray-400"
-                    } bg-gray-50 hover:bg-white focus:bg-white transform focus:scale-[1.02]`}
+                        ? "border-red-400 focus:ring-red-400"
+                        : "border-gray-300 hover:border-gray-400"
+                    } bg-gray-50 hover:bg-white focus:bg-white`}
                   >
                     <option value="to_do">📋 To Do</option>
                     <option value="in_progress">⏳ In Progress</option>
@@ -252,16 +250,16 @@ const CreateTaskPage = () => {
                   </div>
                 </div>
                 {errors.status && (
-                  <span className="text-red-500 text-sm mt-1 block animate-bounce">
+                  <span className="text-red-500 text-sm mt-1 block">
                     ⚠️ {errors.status.message}
                   </span>
                 )}
               </div>
 
-              <div className="group">
+              <div>
                 <label
                   htmlFor="priority"
-                  className="block text-sm font-medium text-gray-700 mb-2 transition-colors duration-200 group-focus-within:text-purple-600"
+                  className="block text-sm font-medium text-gray-700 mb-2"
                 >
                   🔥 Priority *
                 </label>
@@ -270,11 +268,11 @@ const CreateTaskPage = () => {
                     {...register("priority")}
                     id="priority"
                     name="priority"
-                    className={`w-full px-4 py-3 rounded-xl border focus:outline-none transition-all duration-200 appearance-none cursor-pointer ${
+                    className={`w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none cursor-pointer ${
                       errors.priority
-                        ? "border-red-400 focus:ring-2 focus:ring-red-400 animate-pulse"
-                        : "border-gray-300 focus:ring-2 focus:ring-purple-400 focus:border-purple-400 hover:border-gray-400"
-                    } bg-gray-50 hover:bg-white focus:bg-white transform focus:scale-[1.02]`}
+                        ? "border-red-400 focus:ring-red-400"
+                        : "border-gray-300 hover:border-gray-400"
+                    } bg-gray-50 hover:bg-white focus:bg-white`}
                   >
                     <option value="low">🟢 Low Priority</option>
                     <option value="medium">🟡 Medium Priority</option>
@@ -297,16 +295,16 @@ const CreateTaskPage = () => {
                   </div>
                 </div>
                 {errors.priority && (
-                  <span className="text-red-500 text-sm mt-1 block animate-bounce">
+                  <span className="text-red-500 text-sm mt-1 block">
                     ⚠️ {errors.priority.message}
                   </span>
                 )}
               </div>
 
-              <div className="md:col-span-2 group">
+              <div className="md:col-span-2">
                 <label
                   htmlFor="assignee_id"
-                  className="block text-sm font-medium text-gray-700 mb-2 transition-colors duration-200 group-focus-within:text-purple-600"
+                  className="block text-sm font-medium text-gray-700 mb-2"
                 >
                   👤 Assignee ID
                 </label>
@@ -316,14 +314,14 @@ const CreateTaskPage = () => {
                   id="assignee_id"
                   name="assignee_id"
                   placeholder="Enter assignee ID (optional)"
-                  className={`w-full px-4 py-3 rounded-xl border focus:outline-none transition-all duration-200 ${
+                  className={`w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
                     errors.assignee_id
-                      ? "border-red-400 focus:ring-2 focus:ring-red-400 animate-pulse"
-                      : "border-gray-300 focus:ring-2 focus:ring-purple-400 focus:border-purple-400 hover:border-gray-400"
-                  } bg-gray-50 hover:bg-white focus:bg-white transform focus:scale-[1.02]`}
+                      ? "border-red-400 focus:ring-red-400"
+                      : "border-gray-300 hover:border-gray-400"
+                  } bg-gray-50 hover:bg-white focus:bg-white`}
                 />
                 {errors.assignee_id && (
-                  <span className="text-red-500 text-sm mt-1 block animate-bounce">
+                  <span className="text-red-500 text-sm mt-1 block">
                     ⚠️ {errors.assignee_id.message}
                   </span>
                 )}
@@ -334,13 +332,13 @@ const CreateTaskPage = () => {
               <button
                 type="button"
                 onClick={() => navigate("/tasks")}
-                className="flex-1 py-3 px-6 rounded-xl border border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200"
+                className="flex-1 py-3 px-6 rounded-lg border border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="flex-1 py-3 px-6 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold hover:from-purple-700 hover:to-pink-700 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
+                className="flex-1 py-3 px-6 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-lg flex items-center justify-center gap-2"
               >
                 <PlusIcon className="w-5 h-5" />
                 <span>Create Task</span>

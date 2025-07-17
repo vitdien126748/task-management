@@ -50,10 +50,14 @@ export default function UpdateTaskPage() {
   useEffect(() => {
     const fetchTask = async () => {
       const task = getTaskById(Number(taskId));
+
       if (task) {
         task.then((taskData) => {
           setValue("title", taskData.title);
-          setValue("description", taskData.description);
+          setValue(
+            "description",
+            taskData.description ? taskData.description : ""
+          );
           setValue("priority", taskData.priority);
           setValue("status", taskData.status);
           setValue(

@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
-import { AuthContext } from "../context";
 import { deleteTask, getTasksByAssignee } from "../services";
 import type { Task } from "../type";
 import SearchTasks from "../components/SearchTasks";
@@ -9,29 +9,36 @@ import {
   PencilSquareIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
+import { useAuth } from "../useAuth";
 
 const MyTasksPage = () => {
+  const { loggedInUser } = useAuth((state) => state);
   const navigate = useNavigate();
-  const { user } = React.useContext(AuthContext);
   const [filters, setFilters] = React.useState({
     status: "",
     priority: "",
   });
   const [tasks, setTasks] = React.useState<Task[]>([]);
 
+  const isAllowedRole = loggedInUser?.roles.some(
+    (role) => role.name === "Administrators"
+  );
+
   React.useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const data = await getTasksByAssignee(user?.id || 0);
+        const data: any = await getTasksByAssignee(
+          Number(loggedInUser?.id) || 0
+        );
         setTasks(data);
       } catch (error) {
         console.error("Failed to fetch tasks:", error);
       }
     };
-    if (user) {
+    if (loggedInUser) {
       fetchTasks();
     }
-  }, [user]);
+  }, [loggedInUser]);
 
   const handleOnSearch = (filters: { status?: string; priority?: string }) => {
     setFilters({
@@ -69,14 +76,14 @@ const MyTasksPage = () => {
   });
 
   return (
-    <div className="w-full px-2 md:px-0 animate-fade-in">
-      <div className="mb-6 animate-slide-in-from-top">
+    <div className="w-full px-2 md:px-0">
+      <div className="mb-6">
         <SearchTasks onSearch={handleOnSearch} />
       </div>
 
-      <div className="bg-white rounded-2xl shadow-2xl overflow-hidden transform transition-all duration-500 hover:shadow-3xl">
-        <div className="bg-gradient-to-r from-green-600 to-teal-600 px-6 py-4">
-          <h2 className="text-2xl font-bold text-white drop-shadow-lg">
+      <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div className="bg-green-600 px-6 py-4">
+          <h2 className="text-2xl font-bold text-white">
             My Tasks ({filteredTasks?.length || 0})
           </h2>
         </div>
@@ -84,7 +91,7 @@ const MyTasksPage = () => {
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead>
-              <tr className="bg-gradient-to-r from-green-50 to-teal-50 text-gray-700">
+              <tr className="bg-green-50 text-gray-700">
                 <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">
                   ID
                 </th>
@@ -190,20 +197,27 @@ const MyTasksPage = () => {
                   <td className="px-4 py-4">
                     <div className="flex gap-2">
                       <button
+                        disabled={!isAllowedRole}
                         onClick={() => navigate(`/view-task/${task.id}`)}
-                        className="p-2 rounded-full bg-green-100 text-green-600 hover:bg-green-200 hover:scale-110 transition-all duration-200 shadow-sm"
+                        className={`p-2 rounded-full bg-green-100 text-green-600 hover:bg-green-200 shadow-sm ${
+                          !isAllowedRole ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
                         title="View Task"
                       >
                         <EyeIcon className="w-4 h-4" />
                       </button>
                       <button
+                        disabled={!isAllowedRole}
                         onClick={() => navigate(`/update-task/${task.id}`)}
-                        className="p-2 rounded-full bg-yellow-100 text-yellow-700 hover:bg-yellow-200 hover:scale-110 transition-all duration-200 shadow-sm"
+                        className={`p-2 rounded-full bg-yellow-100 text-yellow-700 hover:bg-yellow-200 shadow-sm ${
+                          !isAllowedRole ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
                         title="Edit Task"
                       >
                         <PencilSquareIcon className="w-4 h-4" />
                       </button>
                       <button
+                        disabled={!isAllowedRole}
                         onClick={() => {
                           if (typeof task.id === "number") {
                             handleDeleteTask(task.id);
@@ -211,7 +225,9 @@ const MyTasksPage = () => {
                             alert("Task ID is missing.");
                           }
                         }}
-                        className="p-2 rounded-full bg-red-100 text-red-600 hover:bg-red-200 hover:scale-110 transition-all duration-200 shadow-sm"
+                        className={`p-2 rounded-full bg-red-100 text-red-600 hover:bg-red-200 shadow-sm ${
+                          !isAllowedRole ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
                         title="Delete Task"
                       >
                         <TrashIcon className="w-4 h-4" />

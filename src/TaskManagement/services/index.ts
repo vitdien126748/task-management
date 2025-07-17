@@ -1,72 +1,36 @@
 import type { Task } from "../type";
+import apiClient from "../lib/apiClient";
 
-const baseUrl = "https://server.aptech.io";
-
-const defaultHeaders = {
-  "Content-Type": "application/json",
-  Accept: "application/json",
-  Authorization: `Bearer ${localStorage.getItem("access_token") || ""}`,
-};
-export const login = async (username: string, password: string) => {
-  const response = await fetch(`${baseUrl}/auth/login`, {
-    method: "POST",
-    headers: defaultHeaders,
-    body: JSON.stringify({ username, password }),
-  });
-
-  return response.json();
-};
+export const baseUrl = "https://server.aptech.io";
 
 export const getTasks = async () => {
-  const response = await fetch(`${baseUrl}/workspaces/tasks`, {
-    method: "GET",
-    headers: defaultHeaders,
-  });
-
-  return response.json();
+  const response: Task[] = await apiClient.get("/workspaces/tasks");
+  return response;
 };
 
 export const getTasksByAssignee = async (assigneeId: number) => {
-  const response = await fetch(
-    `${baseUrl}/workspaces/tasks/assignee/${assigneeId}`,
-    {
-      method: "GET",
-      headers: defaultHeaders,
-    }
+  const response: Task[] = await apiClient.get(
+    `/workspaces/tasks/assignee/${assigneeId}`
   );
-
-  return response.json();
+  return response;
 };
 
 export const createTask = async (task: Task) => {
-  const response = await fetch(`${baseUrl}/workspaces/tasks`, {
-    method: "POST",
-    headers: defaultHeaders,
-    body: JSON.stringify(task),
-  });
-  return response.json();
+  const response: Task = await apiClient.post("/workspaces/tasks", task);
+  return response;
 };
 
 export const getTaskById = async (id: number) => {
-  const response = await fetch(`${baseUrl}/workspaces/tasks/${id}`, {
-    headers: defaultHeaders,
-  });
-  return response.json();
+  const response: Task = await apiClient.get(`/workspaces/tasks/${id}`);
+  return response;
 };
 
 export const updateTask = async (id: number, task: Task) => {
-  const response = await fetch(`${baseUrl}/workspaces/tasks/${id}`, {
-    method: "PATCH",
-    headers: defaultHeaders,
-    body: JSON.stringify(task),
-  });
-  return response.json();
+  const response: Task = await apiClient.patch(`/workspaces/tasks/${id}`, task);
+  return response;
 };
 
 export const deleteTask = async (id: number) => {
-  const response = await fetch(`${baseUrl}/workspaces/tasks/${id}`, {
-    method: "DELETE",
-    headers: defaultHeaders,
-  });
-  return response.json();
+  const response: Task = await apiClient.delete(`/workspaces/tasks/${id}`);
+  return response;
 };

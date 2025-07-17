@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { deleteTask, getTasks } from "../services";
 import type { Task } from "../type";
@@ -9,16 +10,25 @@ import {
   PencilSquareIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
+import { useAuth } from "../useAuth";
 
 const OurTasksPage = () => {
+  const { loggedInUser } = useAuth((state) => state);
   const [tasks, setTasks] = React.useState<Task[]>([]);
-  const { filters, setFilters } = React.useContext(FilterContext);
+  const { filters, setFilters } = React.useContext(FilterContext) || {
+    filters: {},
+    setFilters: () => {},
+  };
   const navigate = useNavigate();
+
+  const isAllowedRole = loggedInUser?.roles.some(
+    (role) => role.name === "Administrators"
+  );
 
   React.useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const data: Task[] = await getTasks();
+        const data: any = await getTasks();
         setTasks(data);
       } catch (error) {
         console.error("Failed to fetch tasks:", error);
@@ -42,7 +52,7 @@ const OurTasksPage = () => {
     if (confirmDelete) {
       try {
         await deleteTask(id);
-        setTasks(tasks.filter((task) => task.id !== id));
+        setTasks(tasks?.filter((task) => task.id !== id) || []);
         alert("Task deleted successfully.");
       } catch (error) {
         console.error("Failed to delete task:", error);
@@ -51,16 +61,17 @@ const OurTasksPage = () => {
     }
   };
 
-  const filteredTasks = tasks.filter((task) => {
-    const matchesStatus = filters.status
-      ? task.status.toLocaleLowerCase() === filters.status.toLocaleLowerCase()
-      : true;
-    const matchesPriority = filters.priority
-      ? task.priority.toLocaleLowerCase() ===
-        filters.priority.toLocaleLowerCase()
-      : true;
-    return matchesStatus && matchesPriority;
-  });
+  const filteredTasks =
+    tasks?.filter((task) => {
+      const matchesStatus = filters?.status
+        ? task.status.toLocaleLowerCase() === filters.status.toLocaleLowerCase()
+        : true;
+      const matchesPriority = filters?.priority
+        ? task.priority.toLocaleLowerCase() ===
+          filters.priority.toLocaleLowerCase()
+        : true;
+      return matchesStatus && matchesPriority;
+    }) || [];
 
   return (
     <div className="w-full px-2 md:px-0 animate-fade-in">
@@ -184,20 +195,27 @@ const OurTasksPage = () => {
                   <td className="px-4 py-4">
                     <div className="flex gap-2">
                       <button
+                        disabled={!isAllowedRole}
                         onClick={() => navigate(`/view-task/${task.id}`)}
-                        className="p-2 rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200 hover:scale-110 transition-all duration-200 shadow-sm"
+                        className={`p-2 rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200 hover:scale-110 transition-all duration-200 shadow-sm ${
+                          !isAllowedRole ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
                         title="View Task"
                       >
                         <EyeIcon className="w-4 h-4" />
                       </button>
                       <button
+                        disabled={!isAllowedRole}
                         onClick={() => navigate(`/update-task/${task.id}`)}
-                        className="p-2 rounded-full bg-yellow-100 text-yellow-700 hover:bg-yellow-200 hover:scale-110 transition-all duration-200 shadow-sm"
+                        className={`p-2 rounded-full bg-yellow-100 text-yellow-700 hover:bg-yellow-200 hover:scale-110 transition-all duration-200 shadow-sm ${
+                          !isAllowedRole ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
                         title="Edit Task"
                       >
                         <PencilSquareIcon className="w-4 h-4" />
                       </button>
                       <button
+                        disabled={!isAllowedRole}
                         onClick={() => {
                           if (typeof task.id === "number") {
                             handleDeleteTask(task.id);
@@ -205,7 +223,9 @@ const OurTasksPage = () => {
                             alert("Task ID is missing.");
                           }
                         }}
-                        className="p-2 rounded-full bg-red-100 text-red-600 hover:bg-red-200 hover:scale-110 transition-all duration-200 shadow-sm"
+                        className={`p-2 rounded-full bg-red-100 text-red-600 hover:bg-red-200 hover:scale-110 transition-all duration-200 shadow-sm ${
+                          !isAllowedRole ? "opacity-50 cursor-not-allowed" : ""
+                        }`}
                         title="Delete Task"
                       >
                         <TrashIcon className="w-4 h-4" />

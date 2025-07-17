@@ -5,16 +5,13 @@ import {
 
 const AccessDeniedPage = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 via-pink-50 to-purple-50 flex items-center justify-center px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 animate-fade-in">
-        <div className="bg-white rounded-2xl shadow-2xl p-8 sm:p-10 border border-red-100">
-          {/* Animated Lock Icon */}
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
+        <div className="bg-white rounded-lg shadow-md p-8 border border-gray-200">
+          {/* Lock Icon */}
           <div className="flex justify-center mb-8">
-            <div className="relative">
-              <div className="absolute inset-0 bg-red-200 rounded-full animate-pulse"></div>
-              <div className="relative bg-gradient-to-r from-red-500 to-pink-500 rounded-full p-4 transform hover:scale-110 transition-transform duration-300">
-                <LockClosedIcon className="w-12 h-12 text-white animate-bounce" />
-              </div>
+            <div className="bg-red-500 rounded-full p-4">
+              <LockClosedIcon className="w-12 h-12 text-white" />
             </div>
           </div>
 
@@ -29,10 +26,10 @@ const AccessDeniedPage = () => {
           {/* Main Content */}
           <div className="text-center space-y-6">
             <div>
-              <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-pink-600 mb-4">
+              <h1 className="text-4xl font-bold text-red-600 mb-4">
                 Access Denied
               </h1>
-              <div className="w-24 h-1 bg-gradient-to-r from-red-500 to-pink-500 mx-auto rounded-full"></div>
+              <div className="w-24 h-1 bg-red-500 mx-auto rounded-full"></div>
             </div>
 
             <div className="space-y-4">
@@ -50,14 +47,14 @@ const AccessDeniedPage = () => {
             <div className="flex flex-col sm:flex-row gap-4 pt-6">
               <a
                 href="/login"
-                className="flex-1 inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-105 active:scale-95"
+                className="flex-1 inline-flex items-center justify-center gap-2 bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
               >
                 <LockClosedIcon className="w-5 h-5" />
                 Back to Login
               </a>
               <button
                 onClick={() => window.history.back()}
-                className="flex-1 inline-flex items-center justify-center gap-2 bg-gray-200 text-gray-800 py-3 px-6 rounded-lg font-medium hover:bg-gray-300 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200"
+                className="flex-1 inline-flex items-center justify-center gap-2 bg-gray-200 text-gray-800 py-3 px-6 rounded-lg font-medium hover:bg-gray-300 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
               >
                 <svg
                   className="w-5 h-5"
@@ -80,15 +77,15 @@ const AccessDeniedPage = () => {
           {/* Decorative Elements */}
           <div className="mt-8 pt-6 border-t border-gray-200">
             <div className="flex justify-center space-x-4 text-gray-400">
-              <div className="w-2 h-2 bg-red-300 rounded-full animate-pulse"></div>
-              <div className="w-2 h-2 bg-pink-300 rounded-full animate-pulse delay-100"></div>
-              <div className="w-2 h-2 bg-purple-300 rounded-full animate-pulse delay-200"></div>
+              <div className="w-2 h-2 bg-red-300 rounded-full"></div>
+              <div className="w-2 h-2 bg-pink-300 rounded-full"></div>
+              <div className="w-2 h-2 bg-purple-300 rounded-full"></div>
             </div>
           </div>
         </div>
 
         {/* Additional Info Card */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 border border-gray-200 shadow-lg">
+        <div className="bg-white rounded-lg p-6 border border-gray-200 shadow-md">
           <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
             <span>💡</span>
             Need Help?

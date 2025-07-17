@@ -1,10 +1,9 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import React from "react";
-import { AuthContext } from "../context";
-import { login } from "../services";
 import { LockClosedIcon, UserIcon } from "@heroicons/react/24/outline";
+import { useNavigate } from "react-router";
+import { useAuth } from "../useAuth";
 
 interface ILoginFormInput {
   username: string;
@@ -17,7 +16,8 @@ const schema = yup.object({
 });
 
 const LoginPage = () => {
-  const { setUser } = React.useContext(AuthContext);
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -30,20 +30,11 @@ const LoginPage = () => {
   });
 
   const onSubmit: SubmitHandler<ILoginFormInput> = async (data) => {
-    const result = await login(data.username, data.password);
-
-    const authorizedUser = {
-      id: result.loggedInUser.id,
-      email: result.loggedInUser.email,
-      access_token: result.access_token,
-    };
-    setUser(authorizedUser);
-    localStorage.setItem("user", JSON.stringify(authorizedUser));
-    localStorage.setItem("access_token", result.access_token || "");
-
-    // navigate("/tasks");
-    window.location.href = "/tasks";
-    alert("Login successful!");
+    login({
+      username: data.username,
+      password: data.password,
+      navigate,
+    });
   };
 
   return (
